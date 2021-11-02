@@ -1,0 +1,195 @@
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+<div id="loading_style">
+    <h1>Loading... <span style="display: none; opacity: 0;"> This box will be remove when the process is finish!</span>
+    </h1>
+    <div></div>
+</div>
+
+<div id="main" style="display: none;">
+    <input type="text" id="url" placeholder="URL..." value="https://vi.wikipedia.org/wiki/.vn" />
+    <input type="text" id="maincontent_queryselector" placeholder="Main content query selector..."
+        value=".mw-parser-output" />
+    <button id="run" onclick="run(this)">Run!</button>
+    <div id="result" ondblclick="load_style();">
+        <i>Your keywords will be here...</i>
+    </div>
+</div>
+
+<style id="style">
+    #loading_style,
+    #loading_style * {
+        -webkit-transition: 1s;
+        -o-transition: 1s;
+        -moz-transition: 1s;
+        transition: 1s;
+    }
+
+    #loading_style h1 span {
+        opacity: 1 !important;
+        display: inline-block !important;
+    }
+
+    #main {
+        display: block !important;
+    }
+
+    #loading_style {
+        position: fixed;
+        bottom: 8px;
+        right: 8px;
+        border: 1px solid red;
+        width: -webkit-calc(100% - 16px);
+        width: -moz-calc(100% - 16px);
+        width: calc(100% - 16px);
+        min-width: 400px;
+        background-color: white;
+        padding: 8px;
+        text-align: justify;
+        -webkit-box-shadow: 0 0 16px 0 red;
+        -moz-box-shadow: 0 0 16px 0 red;
+        box-shadow: 0 0 16px 0 red;
+        border-radius: 4px;
+    }
+
+    #loading_style h1 {
+        text-align: center;
+        color: red;
+    }
+
+    * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-transition: 0.5s;
+        -o-transition: 0.5s;
+        -moz-transition: 0.5s;
+        transition: 0.5s;
+    }
+
+    #url,
+    #maincontent_queryselector,
+    #run,
+    #result,
+    .keyword {
+        outline: none;
+        padding: 8px;
+        border: 1px solid #aaa;
+        -webkit-transition: 0.5s;
+        -o-transition: 0.5s;
+        -moz-transition: 0.5s;
+        transition: 0.5s;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    #url {
+        width: 100%;
+        resize: vertical;
+        margin-bottom: 12px;
+    }
+
+    #loading_style {
+        -webkit-box-shadow: 0 0 16px 0 yellow;
+        -moz-box-shadow: 0 0 16px 0 yellow;
+        box-shadow: 0 0 16px 0 yellow;
+        border-color: yellow;
+    }
+
+    #maincontent_queryselector {
+        margin-right: 8px;
+        width: -webkit-calc(100% - 113px);
+        width: -moz-calc(100% - 113px);
+        width: calc(100% - 113px);
+    }
+
+    #run {
+        cursor: pointer;
+        width: 100px;
+        background-color: white;
+    }
+
+    #result {
+        margin-top: 12px;
+        text-align: justify;
+    }
+
+    .keyword {
+        width: -webkit-fit-content;
+        width: -moz-fit-content;
+        width: fit-content;
+        display: none;
+        margin: 4px;
+        opacity: 0;
+        background-color: black;
+        color: white;
+    }
+
+    #run:hover,
+    .keyword:hover {
+        -webkit-box-shadow: 0 0 16px 0 #ccc;
+        -moz-box-shadow: 0 0 16px 0 #ccc;
+        box-shadow: 0 0 16px 0 #ccc;
+    }
+
+    #run:active,
+    .keyword:active {
+        background-color: #ddd;
+    }
+
+    #loading_style {
+        -webkit-box-shadow: 0 0 16px 0 green;
+        -moz-box-shadow: 0 0 16px 0 green;
+        box-shadow: 0 0 16px 0 green;
+        border-color: green;
+        opacity: 0;
+        display: none;
+    }
+</style>
+
+<script src="./KeywordFromStringOrHtml.js"></script>
+
+<script>
+    function run(button) {
+        button.innerHTML = "Running...";
+        fetch("https://api.allorigins.win/get?url=" + document.querySelector("#url").value).then(res => res.json()).then(json => {
+            let html_string = json.contents,
+                maincontent_queryselector = document.querySelector("#maincontent_queryselector").value,
+                keywords = KeywordFromStringOrHtml(html_string, maincontent_queryselector);
+            document.querySelector("#result").innerHTML = "";
+            keywords.forEach(keyword => document.querySelector("#result").innerHTML += "<div class = \"keyword\" onclick=\"window.open('https://www.google.com/search?q=" + keyword + "')\">" + keyword + "</div>");
+            button.innerHTML = "Run!";
+            document.querySelectorAll(".keyword").forEach((keyword_elm, index) => {
+                setTimeout(() => {
+                    keyword_elm.style.display = "inline-block";
+                }, index * 90);
+                setTimeout(() => {
+                    keyword_elm.style.opacity = 1;
+                    keyword_elm.style.cursor = "pointer";
+                    keyword_elm.style.backgroundColor = "white";
+                    keyword_elm.style.color = "black";
+                }, index * 100);
+            });
+        });
+    }
+
+    function load_style() {
+        let page_style = document.querySelector("#style").innerHTML;
+        document.querySelector("#style").innerHTML = "";
+        page_style.split("").forEach((char, index) => {
+            setTimeout(() => {
+                document.querySelector("#style").innerHTML += char;
+                document.querySelector("#loading_style div").innerHTML += char;
+            }, index * 10);
+        });
+    }
+
+    run(document.querySelector("button"));
+</script>
