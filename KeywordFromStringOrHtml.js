@@ -87,7 +87,7 @@ function KeywordFromStringOrHtml(string_or_html, maincontent_queryselector, defu
                 return_result = {};
 
             if (request_param == undefined || request_param == "phnmode_only_keywords")
-                request_list = ["keywords", "news_keywords", "tt_list_folder_name", "og:site_name", "og:title", "article:tag", "medium", "source", "copyright", "author", "geo.placename", "geo.region", "twitter:title", "its_title", "its_section", "its_subsection", "its_tag", "its_topic"]; // "description", "og:description", "twitter:description"
+                request_list = ["keywords", "news_keywords", "tt_list_folder_name", "og:site_name", "article:tag", "medium", "source", "copyright", "author", "geo.placename", "geo.region", "its_section", "its_subsection", "its_tag", "its_topic"]; // "description", "og:description", "twitter:description", "og:title", "twitter:title", "its_title"
             else if (typeof request_param == "string")
                 request_list = [request_param];
 
