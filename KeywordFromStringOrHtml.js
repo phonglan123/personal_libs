@@ -1,4 +1,4 @@
-function KeywordFromStringOrHtml(string_or_html, maincontent_queryselector, defualt_document = document) {
+function KeywordFromStringOrHtml(string_or_html, maincontent_queryselector, default_document = document) {
     const
         word_counter = (string = "", phnmode_only_keywords = false) => {
             const
@@ -20,7 +20,7 @@ function KeywordFromStringOrHtml(string_or_html, maincontent_queryselector, defu
                 };
 
             if (phnmode_only_keywords)
-                string = string.replace(/[\“\”\-\–\·\•\^&\/\\#,+()$~%.'":;*?<>{}0-9]/g, "").replace(/\n/g, " ").replace(/\s{2,}/g, " ");
+                string = string.replace(/[\“\”\-\–\·\•\^&\/\\#,+()$~%.'":;*?<>{}0-9]/g, " ").replace(/\n/g, " ").replace(/\s{2,}/g, " ");
 
             let words_array = string.split(" "),
                 return_result = {};
@@ -1042,7 +1042,7 @@ function KeywordFromStringOrHtml(string_or_html, maincontent_queryselector, defu
             return return_result;
         };
 
-    let doc = defualt_document,
+    let doc = default_document,
         dom = dom_parser(string_or_html.replace("<!DOCTYPE html>", ""), doc),
         keywords = [],
         keywords_from_metatag = get_metatag("phnmode_only_keywords", dom),
