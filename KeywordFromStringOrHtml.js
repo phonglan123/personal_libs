@@ -1019,7 +1019,7 @@ function KeywordFromStringOrHtml(string_or_html, maincontent_queryselector, defa
                 temp_frame_script = undefined,
                 temp_frame_readfooter = undefined,
                 return_result = undefined;
-                
+
             temp_frame.style.display = "none";
             doc.body.appendChild(temp_frame);
             temp_frame_doc = temp_frame.contentDocument;
@@ -1050,12 +1050,39 @@ function KeywordFromStringOrHtml(string_or_html, maincontent_queryselector, defa
     keywords = [keywords_from_metatag, keywords_from_metatag, keywords_from_maincontent];
     keywords = keywords.flat();
     //if (dom.querySelector("title") != undefined && !keywords.includes(dom.querySelector("title").innerText.toLowerCase()))
-        //keywords.push(dom.querySelector("title").innerText.toLowerCase());
+    //keywords.push(dom.querySelector("title").innerText.toLowerCase());
 
     Object.setPrototypeOf(keywords,
         Object.assign(Object.getPrototypeOf(keywords), {
             WordCounterFromString: word_counter,
-            GetMetatagFromDOM: get_metatag
+            GetMetatagFromDOM: get_metatag,
+            KeywordFromSearchEngine: search_url => {
+                const search_engine_db = {
+                    "google.com": ["/search", "q"],
+                    "bing.com": ["/search", "q"],
+                    "coccoc.com": ["/search", "query"],
+                    "baidu.com": ["/s", "wd"],
+                    "yandex.com": ["/search", "text"],
+                    "search.yahoo.com": ["/search", "p"],
+                    "ask.com": ["/web", "q"],
+                    "duckduckgo.com": ["", "q"],
+                    "search.naver.com": ["/search.naver", "query"],
+                    "search.aol.com": ["/aol/search", "q"],
+                    "search.seznam.cz": ["", "q"],
+                    "ecosia.org": ["/search", "q"]
+                };
+
+                let URL_obj = new URL(search_url),
+                    search_hostname = URL_obj.hostname,
+                    search_pathname = URL_obj.pathname.replace(/\/$/, ""),
+                    search_params = URL_obj.searchParams,
+                    db_entries = Object.entries(search_engine_db);
+
+                for (let i = 0; i < db_entries.length; i++)
+                    if (search_hostname.includes(db_entries[i][0]) && search_pathname == db_entries[i][1][0])
+                        return search_params.get(db_entries[i][1][1]);
+            }
+
         })
     );
 
