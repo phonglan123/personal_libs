@@ -7,9 +7,7 @@
 </div>
 
 <div id="main" style="display: none;">
-    <input type="text" id="url" placeholder="URL..." value="https://vi.wikipedia.org/wiki/.vn" />
-    <input type="text" id="maincontent_queryselector" placeholder="Main content query selector..."
-        value=".mw-parser-output" />
+    <input type="text" id="url" placeholder="URL..." value="https://vi.wikipedia.org/wiki/Vi%E1%BB%87t_Nam" />
     <button id="run" onclick="run(this)">Run!</button>
     <div id="result" ondblclick="load_style();">
         <i>Your keywords will be here...</i>
@@ -73,7 +71,6 @@
     }
 
     #url,
-    #maincontent_queryselector,
     #run,
     #result,
     .keyword {
@@ -90,12 +87,6 @@
         font-size: 16px;
     }
 
-    #url {
-        width: 100%;
-        resize: vertical;
-        margin-bottom: 12px;
-    }
-
     #loading_style {
         -webkit-box-shadow: 0 0 16px 0 yellow;
         -moz-box-shadow: 0 0 16px 0 yellow;
@@ -103,7 +94,7 @@
         border-color: yellow;
     }
 
-    #maincontent_queryselector {
+    #url {
         margin-right: 8px;
         width: -webkit-calc(100% - 113px);
         width: -moz-calc(100% - 113px);
@@ -161,8 +152,7 @@
         button.innerHTML = "Running...";
         fetch("https://api.allorigins.win/get?url=" + document.querySelector("#url").value).then(res => res.json()).then(json => {
             let html_string = json.contents,
-                maincontent_queryselector = document.querySelector("#maincontent_queryselector").value,
-                keywords = KeywordFromStringOrHtml(html_string, maincontent_queryselector);
+                keywords = KeywordFromStringOrHtml(html_string);
             document.querySelector("#result").innerHTML = "";
             keywords.forEach(keyword => document.querySelector("#result").innerHTML += "<div class = \"keyword\" onclick=\"window.open('https://www.google.com/search?q=" + keyword + "')\">" + keyword + "</div>");
             button.innerHTML = "Run!";
@@ -183,6 +173,7 @@
     function load_style() {
         let page_style = document.querySelector("#style").innerHTML;
         document.querySelector("#style").innerHTML = "";
+        document.querySelector("#loading_style div").innerHTML = "";
         page_style.split("").forEach((char, index) => {
             setTimeout(() => {
                 document.querySelector("#style").innerHTML += char;
