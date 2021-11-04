@@ -1049,8 +1049,8 @@ function KeywordFromStringOrHtml(string_or_html, maincontent_queryselector, defu
         keywords_from_maincontent = word_counter(get_main_content(dom, maincontent_queryselector, doc), true);
     keywords = [keywords_from_metatag, keywords_from_metatag, keywords_from_maincontent];
     keywords = keywords.flat();
-    if (dom.querySelector("title") != undefined && !keywords.includes(dom.querySelector("title").innerText.toLowerCase()))
-        keywords.push(dom.querySelector("title").innerText.toLowerCase());
+    //if (dom.querySelector("title") != undefined && !keywords.includes(dom.querySelector("title").innerText.toLowerCase()))
+        //keywords.push(dom.querySelector("title").innerText.toLowerCase());
 
     Object.setPrototypeOf(keywords,
         Object.assign(Object.getPrototypeOf(keywords), {
