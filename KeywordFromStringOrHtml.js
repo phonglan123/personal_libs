@@ -1,4 +1,4 @@
-function KeywordFromStringOrHtml(string_or_html, maincontent_queryselector) {
+function KeywordFromStringOrHtml(string_or_html, maincontent_queryselector, defualt_document = document) {
     const
         word_counter = (string = "", phnmode_only_keywords = false) => {
             const
@@ -1042,7 +1042,7 @@ function KeywordFromStringOrHtml(string_or_html, maincontent_queryselector) {
             return return_result;
         };
 
-    let doc = document,
+    let doc = defualt_document,
         dom = dom_parser(string_or_html.replace("<!DOCTYPE html>", ""), doc),
         keywords = [],
         keywords_from_metatag = get_metatag("phnmode_only_keywords", dom),
